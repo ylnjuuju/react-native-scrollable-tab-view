@@ -3,11 +3,13 @@ const ReactNative = require('react-native');
 const {
   TouchableNativeFeedback,
   View,
+  TouchableOpacity,
+  Text
 } = ReactNative;
 
 
 const height = 16;
-const width = 20;
+const width = 18;
 
 const Button = (props) => {
 
@@ -19,7 +21,7 @@ const Button = (props) => {
 
   const isBadge = parseInt(badge, 10) > 0 && !isNaN(badgenum)
 
-  return <TouchableNativeFeedback
+  return <TouchableOpacity
     delayPressIn={0}
     background={TouchableNativeFeedback.SelectableBackground()} // eslint-disable-line new-cap
     {...props}
@@ -31,7 +33,7 @@ const Button = (props) => {
       </View>
       : null
     }
-  </TouchableNativeFeedback>;
+  </TouchableOpacity>;
 };
 
 module.exports = Button;
