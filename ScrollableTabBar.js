@@ -20,6 +20,7 @@ const ScrollableTabBar = createReactClass({
     goToPage: PropTypes.func,
     activeTab: PropTypes.number,
     tabs: PropTypes.array,
+    badges: PropTypes.array,
     backgroundColor: PropTypes.string,
     activeTextColor: PropTypes.string,
     inactiveTextColor: PropTypes.string,
@@ -124,17 +125,18 @@ const ScrollableTabBar = createReactClass({
     }
   },
 
-  renderTab(name, page, isTabActive, onPressHandler, onLayoutHandler) {
+  renderTab(name, badge, page, isTabActive, onPressHandler, onLayoutHandler) {
     const { activeTextColor, inactiveTextColor, textStyle, } = this.props;
     const textColor = isTabActive ? activeTextColor : inactiveTextColor;
     const fontWeight = isTabActive ? 'bold' : 'normal';
-
+    
     return <Button
       key={`${name}_${page}`}
       accessible={true}
       accessibilityLabel={name}
       accessibilityTraits='button'
       onPress={() => onPressHandler(page)}
+      badge={badge}
       onLayout={onLayoutHandler}
     >
       <View style={[styles.tab, this.props.tabStyle, ]}>
@@ -163,7 +165,8 @@ const ScrollableTabBar = createReactClass({
       left: this.state._leftTabUnderline,
       width: this.state._widthTabUnderline,
     };
-
+    console.log(this);
+    
     return <View
       style={[styles.container, {backgroundColor: this.props.backgroundColor, }, this.props.style, ]}
       onLayout={this.onContainerLayout}
@@ -183,9 +186,13 @@ const ScrollableTabBar = createReactClass({
           onLayout={this.onTabContainerLayout}
         >
           {this.props.tabs.map((name, page) => {
+            let badge = '0'
+            if (this.props.badges && this.props.badges.length && this.props.badges.length > page) {
+              badge = this.props.badges[page] + ''
+            }
             const isTabActive = this.props.activeTab === page;
             const renderTab = this.props.renderTab || this.renderTab;
-            return renderTab(name, page, isTabActive, this.props.goToPage, this.measureTab.bind(this, page));
+            return renderTab(name, badge, page, isTabActive, this.props.goToPage, this.measureTab.bind(this, page));
           })}
           <Animated.View style={[tabUnderlineStyle, dynamicTabUnderline, this.props.underlineStyle, ]} />
         </View>
